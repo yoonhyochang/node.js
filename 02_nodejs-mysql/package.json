@@ -19,8 +19,8 @@
     "url": "https://github.com/wikibook/nodejs/issues"
   },
   "homepage": "https://github.com/wikibook/nodejs#readme",
-  
   "dependencies": {
+    "mysql": "^2.18.1",
     "sanitize-html": "^1.18.2"
   }
 }
