@@ -1,4 +1,4 @@
-//* 7.객체의 속성 중 id에 담긴 데이터를 가져오게 수정
+//* 3. 작성자를 출력하는 콤보 박스를 템플릿으로 분리
 module.exports = {
     HTML:function(title, list, body, control) {
         return `
@@ -20,10 +20,22 @@ module.exports = {
         var list = '<ul>';
         var i = 0;
         while(i < topics.length) {
-            list = list + `<li><a href="/?id=${topics[i].id}">${topics[i].title}</a></li>`;//여기
+            list = list + `<li><a href="/?id=${topics[i].id}">${topics[i].title}</a></li>`;
             i = i + 1;
         }
         list = list+'</ul>';
         return list;
-    }
+    },authorSelect:function(authors) {//여기부터
+        var tag = '';
+        var i = 0;
+        while(i < authors.length) {
+            tag += `<option value="${authors[i].id}">${authors[i].name}</option>`;
+            i++;
+        }
+        return `
+            <select name="author">
+                ${tag}
+            </select>
+        `
+    } //여기까지
 }
