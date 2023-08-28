@@ -1,3 +1,4 @@
+//* 7.객체의 속성 중 id에 담긴 데이터를 가져오게 수정
 module.exports = {
     HTML:function(title, list, body, control) {
         return `
@@ -15,12 +16,11 @@ module.exports = {
             </body>
         </html>
         `;
-    },
-    list:function(filelist) {
+    },list:function(topics) {
         var list = '<ul>';
         var i = 0;
-        while(i < filelist.length) {
-            list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
+        while(i < topics.length) {
+            list = list + `<li><a href="/?id=${topics[i].id}">${topics[i].title}</a></li>`;//여기
             i = i + 1;
         }
         list = list+'</ul>';
