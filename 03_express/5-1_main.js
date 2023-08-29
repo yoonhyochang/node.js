@@ -1,10 +1,11 @@
-//* 2. 기존 코드를 이용해 상세 보기 페이지 구현
+//* 상세 보기 페이지 구현
+//* 1. 익스프레스의 라우트 가이드에 따라 사용자가 요청한 URL 가져오기
 var express = require('express');
 var app = express();
 var fs = require('fs');
 var template = require('./lib/template.js');
-var path = require('path'); //여기
-var sanitizeHtml = require('sanitize-html');//여기
+var path = require('path');
+var sanitizeHtml = require('sanitize-html');
 
 app.get('/', function(request, response) {
     fs.readdir('./data', function(error, filelist) {
@@ -18,29 +19,9 @@ app.get('/', function(request, response) {
         response.send(html);
     });
 });
-app.get('/page/:pageId', function(request, response) {//여기부터
-    fs.readdir('./data', function(error, filelist) {
-        var filteredId = path.parse(request.params.pageId).base;
-        fs.readFile(`data/${filteredId}`, 'utf8', function(err, description) {
-            var title = request.params.pageId;
-            var sanitizedTitle = sanitizeHtml(title);
-            var sanitizedDescription = sanitizeHtml(description, {
-                allowedTags:['h1']
-            });
-            var list = template.list(filelist);
-            var html = template.HTML(sanitizedTitle, list,
-                `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
-                ` <a href="/create">create</a>
-                    <a href="/update?id=${sanitizedTitle}">update</a>
-                    <form action="delete_process" method="post">
-                        <input type="hidden" name="id" value="${sanitizedTitle}">
-                        <input type="submit" value="delete">
-                    </form>`
-            );
-            response.send(html);
-        });
-    }); 
-});//여기까지
+app.get('/page/:pageId', function(request, response) {//여기
+    response.send(request.params);
+});
 app.listen(3000, function() {
     console.log('Example app listening on port 3000!')
 });
