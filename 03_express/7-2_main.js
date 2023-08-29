@@ -1,4 +1,4 @@
-//* 3. 글을 수정하는 update_process 구현
+//* 2. 글을 수정하는 페이지 구현
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -75,7 +75,7 @@ app.post('/create_process', function(request, response) {
         });
     });
 });
-app.get('/update/:pageId', function(request, response) {
+app.get('/update/:pageId', function(request, response) {//여기부터
     fs.readdir('./data', function(error, filelist) {
         var filteredId = path.parse(request.params.pageId).base;
         fs.readFile(`data/${filteredId}`, 'utf8', function(err, description) {
@@ -98,24 +98,6 @@ app.get('/update/:pageId', function(request, response) {
                 `<a href="/create">create</a> <a href="/update/${title}">update</a>`
             );
             response.send(html);
-        });
-    });
-});
-app.post('/update_process', function(request, response) {//여기부터
-    var body = '';
-    request.on('data', function(data) {
-        body = body + data;
-    });
-    request.on('end', function() {
-        var post = qs.parse(body);
-        var id = post.id;
-        var title = post.title;
-        var description = post.description;
-        fs.rename(`data/${id}`, `data/${title}`, function(error) {
-            fs.writeFile(`data/${title}`, description, 'utf8', function(err) {
-                response.writeHead(302, {Location: `/?id=${title}`});
-                response.end();
-            });
         });
     });
 });//여기까지
