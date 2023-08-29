@@ -1,3 +1,4 @@
+//* 11. 템플릿으로 분리한 코드 제거 및 불러오기
 var db = require('./db');
 var template = require('./template.js');
 
