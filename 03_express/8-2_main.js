@@ -1,4 +1,4 @@
-//* 3. 글을 수정하는 부분에도 리다이렉트 기능 적용
+//* 2. 글을 삭제하는 delete_process 구현
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -113,13 +113,13 @@ app.post('/update_process', function(request, response) {
         var description = post.description;
         fs.rename(`data/${id}`, `data/${title}`, function(error) {
             fs.writeFile(`data/${title}`, description, 'utf8', function(err) {
-                response.redirect(`/?id=${title}`);//여기
+                response.writeHead(302, {Location: `/?id=${title}`});
                 response.end();
             });
         });
     });
 });
-app.post('/delete_process', function(request, response) {
+app.post('/delete_process', function(request, response) {//여기부터
     var body = '';
     request.on('data', function(data) {
         body = body + data;
@@ -132,7 +132,7 @@ app.post('/delete_process', function(request, response) {
             response.redirect('/');
         });
     });
-});
+});//여기까지
 
 app.listen(3000, function() {
     console.log('Example app listening on port 3000!')

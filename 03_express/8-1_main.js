@@ -1,4 +1,5 @@
-//* 3. 글을 수정하는 부분에도 리다이렉트 기능 적용
+//* 페이지 삭제 구현
+//* 1. 쿼리 스트링 방식이 아닌 시맨틱 URL을 사용하게 링크에 슬래시를 추가
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -19,7 +20,7 @@ app.get('/', function(request, response) {
         response.send(html);
     });
 });
-app.get('/page/:pageId', function(request, response) {
+app.get('/page/:pageId', function(request, response) {//여기
     fs.readdir('./data', function(error, filelist) {
         var filteredId = path.parse(request.params.pageId).base;
         fs.readFile(`data/${filteredId}`, 'utf8', function(err, description) {
@@ -33,7 +34,7 @@ app.get('/page/:pageId', function(request, response) {
                 `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
                 ` <a href="/create">create</a>
                     <a href="/update/${sanitizedTitle}">update</a>
-                    <form action="/delete_process" method="post">
+                    <form action="/delete_process" method="post"> //여기
                         <input type="hidden" name="id" value="${sanitizedTitle}">
                         <input type="submit" value="delete">
                     </form>`
@@ -113,23 +114,9 @@ app.post('/update_process', function(request, response) {
         var description = post.description;
         fs.rename(`data/${id}`, `data/${title}`, function(error) {
             fs.writeFile(`data/${title}`, description, 'utf8', function(err) {
-                response.redirect(`/?id=${title}`);//여기
+                response.writeHead(302, {Location: `/?id=${title}`});
                 response.end();
             });
-        });
-    });
-});
-app.post('/delete_process', function(request, response) {
-    var body = '';
-    request.on('data', function(data) {
-        body = body + data;
-    });
-    request.on('end', function() {
-        var post = qs.parse(body);
-        var id = post.id;
-        var filteredId = path.parse(id).base;
-        fs.unlink(`data/${filteredId}`, function(error) {
-            response.redirect('/');
         });
     });
 });
