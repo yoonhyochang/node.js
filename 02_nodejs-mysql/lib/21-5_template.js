@@ -1,5 +1,5 @@
-//* 4. 데이터를 표시하는 코드를 sanitizeHtml 함수로 감싸기 - template.js
-var sanitizeHtml = require('sanitize-html');//여기
+//* 5. 데이터를 표시하는 코드를 sanitizeHtml 함수로 감싸기 - template.js
+var sanitizeHtml = require('sanitize-html');
 
 module.exports = {
     HTML:function(title, list, body, control) {
@@ -23,7 +23,7 @@ module.exports = {
         var list = '<ul>';
         var i = 0;
         while(i < topics.length) {
-            list = list + `<li><a href="/?id=${topics[i].id}">${sanitizeHtml(topics[i].title)}</a></li>`;//여기
+            list = list + `<li><a href="/?id=${topics[i].id}">${sanitizeHtml(topics[i].title)}</a></li>`;
             i = i + 1;
         }
         list = list+'</ul>';
@@ -36,7 +36,7 @@ module.exports = {
             if(authors[i].id === author_id) {
                 selected = ' selected';
             }
-            tag += `<option value="${authors[i].id}"${selected}>${authors[i].name}</option>`;
+            tag += `<option value="${authors[i].id}"${selected}>${sanitizeHtml(authors[i].name)}</option>`;//여기
             i++;
         }
         return `

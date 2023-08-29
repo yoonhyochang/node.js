@@ -1,4 +1,4 @@
-//* 6. 데이터를 표시하는 코드를 sanitiHtml 함수로 감싸기 - topic.js
+//* 2. 데이터를 표시하는 코드를 sanitizeHtml 함수로 감싸기
 var db = require('./db');
 var template = require('./template.js');
 var url = require('url');
@@ -37,9 +37,9 @@ exports.page = function(request, response) {
             var description = topic[0].description;
             var list = template.list(topics);
             var html = template.HTML(title, list,
-                `<h2>${sanitizeHtml(title)}</h2>
-                ${sanitizeHtml(description)}
-                <p>by ${sanitizeHtml(topic[0].name)}</p>
+                `<h2>${sanitizeHtml(title)}</h2>//여기
+                ${sanitizeHtml(description)}/여기
+                <p>by ${sanitizeHtml(topic[0].name)}</p>/여기
                 `,
                 ` <a href="/create">create</a>
                     <a href="/update?id=${queryData.id}">update</a>
@@ -59,7 +59,7 @@ exports.create = function(request, response) {
         db.query('SELECT * FROM author', function(error2, authors) {
             var title = 'Create';
             var list = template.list(topics);
-            var html = template.HTML(sanitizeHtml(title), list,
+            var html = template.HTML(title, list,
                 `
                 <form action="/create_process" method="post">
                     <p><input type="text" name="title" placeholder="title"></p>
@@ -116,18 +116,17 @@ exports.update = function(request, response) {
             }
             db.query('SELECT * FROM author', function(error2, authors) {
                 var list = template.list(topics);
-                var html = template.HTML(sanitizeHtml(topic[0].title), list,//여기
+                var html = template.HTML(topic[0].title, list,
                     `
                     <form action="/update_process" method="post">
                         <input type="hidden" name="id" value="${topic[0].id}">
                         <p><input type="text" name="title" placeholder="title"
-                                   value="${sanitizeHtml(topic[0].title)}"></p>//여기
+                                   value="${topic[0].title}"></p>
                         <p>
-                            <textarea name="description" placeholder="description">
-                            ${sanitizeHtml(topic[0].description)}</textarea>//여기
+                            <textarea name="description" placeholder="description">${topic[0].description}</textarea>
                         </p>
                         <p>
-                            ${template.authorSelect(authors, topic[0].author_id)}//여기
+                            ${template.authorSelect(authors, topic[0].author_id)}
                         </p>
                         <p>
                             <input type="submit">
