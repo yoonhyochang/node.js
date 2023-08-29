@@ -1,4 +1,4 @@
-//* 3. next 함수의 동작확인
+//* 2. 콜백 함수 안에 반복해서 사용한 로직을 작성
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -12,9 +12,9 @@ var compression = require('compression');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
 app.use(function(request, response, next) {
-    fs.readdir('./data', function(error, filelist) {
-        request.list = filelist;
-        next();
+    fs.readdir('./data', function(error, filelist) {//여기
+        request.list = filelist;//여기
+        next();//여기
     });
 });
 app.get('/', function(request, response) {
@@ -30,7 +30,6 @@ app.get('/', function(request, response) {
     });
 });
 app.get('/page/:pageId', function(request, response) {
-    console.log(request.list);//여기
     fs.readdir('./data', function(error, filelist) {
         var filteredId = path.parse(request.params.pageId).base;
         fs.readFile(`data/${filteredId}`, 'utf8', function(err, description) {

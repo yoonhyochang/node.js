@@ -1,4 +1,5 @@
-//* 3. next 함수의 동작확인
+//* 익스프레스 미들웨어 만들기
+//* 1. 미들웨어 만들기
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -11,11 +12,7 @@ var compression = require('compression');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
-app.use(function(request, response, next) {
-    fs.readdir('./data', function(error, filelist) {
-        request.list = filelist;
-        next();
-    });
+app.use(function(request, response, next) {//여기
 });
 app.get('/', function(request, response) {
     fs.readdir('./data', function(error, filelist) {
@@ -30,7 +27,6 @@ app.get('/', function(request, response) {
     });
 });
 app.get('/page/:pageId', function(request, response) {
-    console.log(request.list);//여기
     fs.readdir('./data', function(error, filelist) {
         var filteredId = path.parse(request.params.pageId).base;
         fs.readFile(`data/${filteredId}`, 'utf8', function(err, description) {
