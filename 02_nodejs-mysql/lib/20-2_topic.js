@@ -1,4 +1,4 @@
-//* 7. SQL 문에서 물음표를 사용하게 수정
+//* 2. SQL 익젝션 공격을 허용하는 방식으로 코드를 수정
 var db = require('./db');
 var template = require('./template.js');
 var url = require('url');
@@ -27,10 +27,11 @@ exports.page = function(request, response) {
         }
         var query = db.query(`SELECT * FROM topic LEFT JOIN author ON
                                 topic.author_id=author.id WHERE
-                                topic.id=?`,[queryData.id], function(error2, topic) {//여기
+                                topic.id=${queryData.id}`,[queryData.id], function(error2, topic) {//여기
             if(error2) {
                 throw error2;
             }
+            console.log(topic);
             var title = topic[0].title;
             var description = topic[0].description;
             var list = template.list(topics);
@@ -46,6 +47,7 @@ exports.page = function(request, response) {
                         <input type="submit" value="delete">
                     </form>`
             );
+            console.log(query.sql);
             response.writeHead(200);
             response.end(html);
         });

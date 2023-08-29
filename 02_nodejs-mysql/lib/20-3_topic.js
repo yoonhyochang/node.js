@@ -1,4 +1,4 @@
-//* 7. SQL 문에서 물음표를 사용하게 수정
+//* 3 데이터베이스에 질의하는 구문이 리턴하는 실제 SQL 문을 출력
 var db = require('./db');
 var template = require('./template.js');
 var url = require('url');
@@ -25,12 +25,16 @@ exports.page = function(request, response) {
         if(error) {
             throw error;
         }
-        var query = db.query(`SELECT * FROM topic LEFT JOIN author ON
-                                topic.author_id=author.id WHERE
-                                topic.id=?`,[queryData.id], function(error2, topic) {//여기
+        //여기부터
+        var sql = `SELECT * FROM topic LEFT JOIN author ON
+                     topic.author_id=author.id WHERE
+                     topic.id=${queryData.id}`;
+        console.log(sql);//여기까지
+        var query = db.query(sql, function(error2, topic) {//여기
             if(error2) {
                 throw error2;
             }
+            console.log(topic);
             var title = topic[0].title;
             var description = topic[0].description;
             var list = template.list(topics);
@@ -46,6 +50,7 @@ exports.page = function(request, response) {
                         <input type="submit" value="delete">
                     </form>`
             );
+            console.log(query.sql);
             response.writeHead(200);
             response.end(html);
         });
