@@ -48,13 +48,13 @@ exports.create_process = function(request, response) {//여기
         var post = qs.parse(body);
         db.query(`
             INSERT INTO author (name, profile)
-                VALUES(?, ?)`,
+                VALUES(?, ?)`,//여기
             [post.name, post.profile],
             function(error, result) {
                 if(error) {
                     throw error;
                 }
-                response.writeHead(302, {Location: `/author`});
+                response.writeHead(302, {Location: `/author`});//여기
                 response.end();
             }
         );

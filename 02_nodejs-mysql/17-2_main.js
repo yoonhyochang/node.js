@@ -1,11 +1,11 @@
-//* 2. author 링크를 클릭하면 요청을 처리
+//* 2. 저자를 추가하는 요청을 처리하는 /author/create_process 추가
 var http = require('http');
 var url = require('url');
 var qs = require('querystring');
 var template = require('./lib/template.js');
 var db = require('./lib/db.js');
 var topic = require('./lib/topic');
-var author = require('./lib/author') //여기
+var author = require('./lib/author')
 
 var app = http.createServer(function(request, response) {
     var _url = request.url;
@@ -19,7 +19,7 @@ var app = http.createServer(function(request, response) {
         }
     } else if(pathname === '/create') {
         topic.create(request, response);
-    } else if(pathname === '/create_procehttp://localhost:3000/update?id=4ss') {
+    } else if(pathname === '/create_process') {
         topic.create_process(request, response);
     } else if(pathname === '/update') {
         topic.update(request, response);
@@ -27,8 +27,10 @@ var app = http.createServer(function(request, response) {
         topic.update_process(request, response);
     } else if(pathname === '/delete_process') {
         topic.delete_process(request, response);
-    } else if(pathname === '/author') { //여기
-        author.home(request, response); //여기
+    } else if(pathname === '/author') {
+        author.home(request, response);
+    } else if(pathname === '/author/create_process') { //여기
+        author.create_process(request, response);
     } else {
         response.writeHead(404);
         response.end('Not found');

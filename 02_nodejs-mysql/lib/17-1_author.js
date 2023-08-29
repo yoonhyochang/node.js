@@ -1,9 +1,9 @@
-//* 3. 저자를 추가하는 요청을 처리
+//* 저자 생성 기능 구현
+//* 1. 저자를 추가하기 위한 폼 추가 및 불필요한 링크 삭제
 var db = require('./db');
 var template = require('./template.js');
-var qs = require('querystring');//여기
 
-exports.home = function(request, response) {//여기
+exports.home = function(request, response) {
     db.query(`SELECT * FROM topic`, function(error, topics) {
         db.query(`SELECT * FROM author`, function(error2, authors) {
             var title = 'author';
@@ -19,7 +19,7 @@ exports.home = function(request, response) {//여기
                         border: 1px solid black;
                     }
                 </style>
-                <form action="/author/create_process" method="post">
+                <form action="/author/create_process" method="post">//여기
                     <p>
                         <input type="text" name="name" placeholder="name">
                     </p>
@@ -29,34 +29,12 @@ exports.home = function(request, response) {//여기
                     <p>
                         <input type="submit">
                     </p>
-                </form>
+                </form>//여기
                 `,
                 ``
             );
             response.writeHead(200);
             response.end(html);
         });
-    });
-}
-
-exports.create_process = function(request, response) {//여기
-    var body = '';//여기
-    request.on('data', function(data) {//여기
-        body = body + data;
-    });
-    request.on('end', function() {
-        var post = qs.parse(body);
-        db.query(`
-            INSERT INTO author (name, profile)
-                VALUES(?, ?)`,
-            [post.name, post.profile],
-            function(error, result) {
-                if(error) {
-                    throw error;
-                }
-                response.writeHead(302, {Location: `/author`});
-                response.end();
-            }
-        );
     });
 }
