@@ -1,11 +1,11 @@
-//* 2. 새 글을 생성하는 create_process 구현
+//* 페이지 생성 구현
+//* 1. 새 글을 작성하는 페이지 구현
 var express = require('express');
 var app = express();
 var fs = require('fs');
 var template = require('./lib/template.js');
 var path = require('path');
 var sanitizeHtml = require('sanitize-html');
-var qs = require('querystring'); //여기
 
 app.get('/', function(request, response) {
     fs.readdir('./data', function(error, filelist) {
@@ -42,7 +42,7 @@ app.get('/page/:pageId', function(request, response) {
         });
     });
 });
-app.get('/create', function(request, response) {
+app.get('/create', function(request, response) {//여기부터
     fs.readdir('./data', function(error, filelist) {
         var title = 'WEB - create';
         var list = template.list(filelist);
@@ -59,22 +59,7 @@ app.get('/create', function(request, response) {
         `, '');
         response.send(html);
     });
-});
-app.post('/create_process', function(request, response) {//여기부터
-    var body = '';
-    request.on('data', function(data) {
-        body = body + data;
-    });
-    request.on('end', function() {
-        var post = qs.parse(body);
-        var title = post.title;
-        var description = post.description;
-        fs.writeFile(`data/${title}`, description, 'utf8', function(err) {
-            response.writeHead(302, {Location: `/?id=${title}`});
-            response.end();
-        });
-    });
-});//여기 까지
+});//여기까지
 
 app.listen(3000, function() {
     console.log('Example app listening on port 3000!')
