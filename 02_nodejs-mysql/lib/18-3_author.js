@@ -1,4 +1,4 @@
-//* 5. 저자를 수정하는 요청을 처리
+//* 3. 저자를 수정하기 위한 폼을 요청하는 처리
 var db = require('./db');
 var template = require('./template.js');
 var qs = require('querystring');
@@ -62,12 +62,12 @@ exports.create_process = function(request, response) {
     });
 }
 
-exports.update = function(request, response) {
+exports.update = function(request, response) {//여기부터 //여기
     db.query(`SELECT * FROM topic`, function(error, topics) {
         db.query(`SELECT * FROM author`, function(error2, authors) {
-            var _url = request.url;
-            var queryData = url.parse(_url, true).query;
-            db.query(`SELECT * FROM author WHERE id=?`, [queryData.id], function(error3, author) {
+            var _url = request.url;//여기
+            var queryData = url.parse(_url, true).query;//여기
+            db.query(`SELECT * FROM author WHERE id=?`, [queryData.id], function(error3, author) {//여기
                 var title = 'author';
                 var list = template.list(topics);
                 var html = template.HTML(title, list,
@@ -81,47 +81,26 @@ exports.update = function(request, response) {
                             border: 1px solid black;
                         }
                     </style>
-                    <form action="/author/update_process" method="post">
+                    <form action="/author/update_process" method="post">//여기
+                        <p>//여기
+                            <input type="hidden" name="id" value="${queryData.id}">//여기
+                        </p>//여기
                         <p>
-                            <input type="hidden" name="id" value="${queryData.id}">
+                            <input type="text" name="name" value="${author[0].name}" placeholder="name">//여기
                         </p>
                         <p>
-                            <input type="text" name="name" value="${author[0].name}" placeholder="name">
+                            <textarea name="profile" placeholder="description">${author[0].profile}</textarea>//여기
                         </p>
                         <p>
-                            <textarea name="profile" placeholder="description">${author[0].profile}</textarea>
-                        </p>
-                        <p>
-                            <input type="submit" value="update">
+                            <input type="submit" value="update">//여기
                         </p>
                     </form>
                     `,
                     ``
                 );
                 response.writeHead(200);
-                response.end(html);
+                response.end(html);//여기까지
             });
         });
     });
 }
-
-exports.update_process = function(request, response) {//여기부터 //여기
-    var body = '';
-    request.on('data', function(data) {
-        body = body + data;
-    });
-    request.on('end', function() {
-        var post = qs.parse(body);
-        db.query(`
-            UPDATE author SET name=?, profile=? WHERE id=?`,//여기
-            [post.name, post.profile, post.id],//여기
-            function(error, result) {
-                if(error) {
-                    throw error;
-                }
-                response.writeHead(302, {Location: `/author`});
-                response.end();
-            }
-        );
-    });
-}//여기까지
