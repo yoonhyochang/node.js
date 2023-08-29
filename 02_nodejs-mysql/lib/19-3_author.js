@@ -1,4 +1,4 @@
-//* 4. 저자를 삭제하면 해당 저자의 글도 함께 삭제
+//* 3. 저자를 삭제하는 요청을 처리
 var db = require('./db');
 var template = require('./template.js');
 var qs = require('querystring');
@@ -126,32 +126,23 @@ exports.update_process = function(request, response) {
     });
 }
 
-exports.delete_process = function(request, response) {
+exports.delete_process = function(request, response) { //여기부터 //여기
     var body = '';
     request.on('data', function(data) {
         body = body + data;
     });
     request.on('end', function() {
         var post = qs.parse(body);
-        db.query(//여기부터
-            `DELETE FROM topic WHERE author_id=?`,
-            [post.id],
-            function(error1, result1) {
-                if(error1) {
-                    throw error1;
-                }//여기까지
-                db.query(`
-                    DELETE FROM author WHERE id=?`,
-                    [post.id],
-                    function(error, result) {
-                        if(error) {
-                            throw error;
-                        }
-                        response.writeHead(302, {Location: `/author`});
-                        response.end();
-                    }
-                );
+        db.query(`
+            DELETE FROM author WHERE id=?`,//여기
+            [post.id],//여기
+            function(error, result) {
+                if(error) {
+                    throw error;
+                }
+                response.writeHead(302, {Location: `/author`});
+                response.end();
             }
         );
     });
-}
+}//여기 까지
