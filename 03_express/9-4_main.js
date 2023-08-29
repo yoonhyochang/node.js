@@ -1,9 +1,4 @@
-//* compression 미들웨어 사용하기 (데이터를 압축해서 보내는 역활)
-//* compression 설치 npm install compression --save
-//* 5. compression 모듈 불러이기
-// 웹 브라우저 캐시 강제로 지우기  [Ctrl]+[Shift]+[R] (브라우저에서)
-// 크기 확인 브라우저 오른쪽 클릭 후 검사>네트워크 텝 클릭> 파일 캐시 사이즈확인
-// 전 1.9kb 사이즈, 후
+//* 4. create_process에서 body-parser가 만들어준 데이터를 이용하는 방식으로 수정
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -12,10 +7,8 @@ var path = require('path');
 var sanitizeHtml = require('sanitize-html');
 var qs = require('querystring');
 var bodyParser = require('body-parser');
-var compression = require('compression');//여기
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(compression());//여기
 app.get('/', function(request, response) {
     fs.readdir('./data', function(error, filelist) {
         var title = 'Welcome';
@@ -105,7 +98,7 @@ app.get('/update/:pageId', function(request, response) {
     });
 });
 app.post('/update_process', function(request, response) {
-    var post = request.body;
+    var post = request.body;// 여기
     var id = post.id;
     var title = post.title;
     var description = post.description;
@@ -117,7 +110,7 @@ app.post('/update_process', function(request, response) {
     });
 });
 app.post('/delete_process', function(request, response) {
-    var post = request.body;
+    var post = request.body;//여기
     var id = post.id;
     var filteredId = path.parse(id).base;
     fs.unlink(`data/${filteredId}`, function(error) {

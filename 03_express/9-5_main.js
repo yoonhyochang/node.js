@@ -2,8 +2,8 @@
 //* compression 설치 npm install compression --save
 //* 5. compression 모듈 불러이기
 // 웹 브라우저 캐시 강제로 지우기  [Ctrl]+[Shift]+[R] (브라우저에서)
-// 크기 확인 브라우저 오른쪽 클릭 후 검사>네트워크 텝 클릭> 파일 캐시 사이즈확인
-// 전 1.9kb 사이즈, 후
+// 크기 확인 브라우저 오른쪽 클릭 후 검사>네트워크 텝 클릭> 브라우저 새로고침> Cookies탭 에서 사이즈 확인
+// 전 1.9kb 사이즈, 후 1.0kb 사이즈
 var express = require('express');
 var app = express();
 var fs = require('fs');
