@@ -1,4 +1,6 @@
-//* 2. 홈 화면에 이미지 출력하기
+//* 정적이 파일의 서비스
+//03_express\public\images\ 경로에 upsplash.con(무료저작권 사이트)에 이미지 검색후 업로드(hello.jpg)
+//* 1. public 디렉터리에서 정적인 파일 찾기
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -11,7 +13,7 @@ var compression = require('compression');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
-app.use(express.static('public'));
+app.use(express.static('public')); //여기(브라우저 http://localhost:3000/images/hello.jpg 에 나옴)
 app.get('*', function(request, response, next) {
     fs.readdir('./data', function(error, filelist) {
         request.list = filelist;
@@ -23,9 +25,7 @@ app.get('/', function(request, response) {
     var description = 'Hello, Node.js';
     var list = template.list(request.list);
     var html = template.HTML(title, list,
-        `<h2>${title}</h2>${description}
-        <img src="/images/hello.jpg" style="width:300px; display:block; margin-top:10px;">
-        `,//여기
+        `<h2>${title}</h2>${description}`,
         `<a href="/create">create</a>`
     );
     response.send(html);
