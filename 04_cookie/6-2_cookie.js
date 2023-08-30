@@ -1,4 +1,4 @@
-//6. 쿠키를 생성하는 코드의 주석을 해제
+//* 2. 쿠키를 생성하는 코드를 주석으로 처리
 var http = require('http');
 var cookie = require('cookie');
 http.createServer(function(request, response) {
@@ -8,12 +8,12 @@ http.createServer(function(request, response) {
         cookies = cookie.parse(request.headers.cookie);
     }
     console.log(cookies.yummy_cookie);
-    response.writeHead(200, {
-        'Set-Cookie':[
-            'yummy_cookie=choco',
-            'tasty_cookie=strawberry',
-            `Permanent=cookies; Max-Age=${60*60*24*30}`
-        ]
-    });
+    // response.writeHead(200, {
+    //     'Set-Cookie':[
+    //         'yummy_cookie=choco',
+    //         'tasty_cookie=strawberry',
+    //         `Permanent=cookies; Max-Age=${60*60*24*30}`
+    //     ]
+    // });
     response.end('Cookie!!');
 }).listen(3000);

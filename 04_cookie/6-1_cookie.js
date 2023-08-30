@@ -1,4 +1,5 @@
-//6. 쿠키를 생성하는 코드의 주석을 해제
+//* 세션과 영구 쿠키
+//* 1. 새로운 쿠키 추가
 var http = require('http');
 var cookie = require('cookie');
 http.createServer(function(request, response) {
@@ -12,7 +13,7 @@ http.createServer(function(request, response) {
         'Set-Cookie':[
             'yummy_cookie=choco',
             'tasty_cookie=strawberry',
-            `Permanent=cookies; Max-Age=${60*60*24*30}`
+            `Permanent=cookies; Max-Age=${60*60*24*30}` //여기(이겨는 역따옴표)
         ]
     });
     response.end('Cookie!!');
