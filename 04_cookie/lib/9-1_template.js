@@ -1,5 +1,8 @@
+//* 쿠키를 이용한 인증 기능 구현
+//* 로그인 화면 만들기
+//* 1. 로그인 링크 추가
 module.exports = {
-    HTML:function(title, list, body, control, authStatusUI = '<a href="/login">login</a>') {
+    HTML:function(title, list, body, control) {
         return `
         <!doctype html>
         <html>
@@ -8,7 +11,7 @@ module.exports = {
                 <meta charset="utf-8">
             </head>
             <body>
-                ${authStatusUI}
+                <a href="/login">login</a> //여기
                 <h1><a href="/">WEB</a></h1>
                 ${list}
                 ${control}

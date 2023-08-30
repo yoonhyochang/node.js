@@ -1,5 +1,7 @@
+//* 로그인 상태를 화면에 반영
+//* 7. 로그인 상태에 따라 로그인/로그아웃으로 변경
 module.exports = {
-    HTML:function(title, list, body, control, authStatusUI = '<a href="/login">login</a>') {
+    HTML:function(title, list, body, control, authStatusUI = '<a href="/login">login</a>') {//여기
         return `
         <!doctype html>
         <html>

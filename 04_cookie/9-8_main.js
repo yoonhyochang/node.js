@@ -1,3 +1,4 @@
+//* 8. 로그인 상태에 따라 로그인/로그아웃으로 변경
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
@@ -18,18 +19,17 @@ function authIsOwner(request, response) {
     }
     return isOwner;
 }
-function authStatusUI(request, response) {
-    var authStatusUI = '<a href="/login">login</a>';
-    if(authIsOwner(request, response)) {
-        authStatusUI = '<a href="/logout_process">logout</a>';
-    }
-    return authStatusUI;
-}
 
 var app = http.createServer(function(request, response) {
     var _url = request.url;
     var queryData = url.parse(_url, true).query;
     var pathname = url.parse(_url, true).pathname;
+    var isOwner = authIsOwner(request, response);
+    var authStatusUI = '<a href="/login">login</a>';//여기
+    if(isOwner) {//여기
+        authStatusUI = '<a href="/logout_process">logout</a>';//여기
+    }//여기
+    console.log(isOwner);
 
     if(pathname === '/') {
         if(queryData.id === undefined) {
@@ -40,7 +40,7 @@ var app = http.createServer(function(request, response) {
                 var html = template.HTML(title, list,
                     `<h2>${title}</h2><p>${description}</p>`,
                     `<a href="/create">create</a>`,
-                    authStatusUI(request, response)
+                    authStatusUI //여기
                 );
                 response.writeHead(200);
                 response.end(html);
@@ -62,7 +62,7 @@ var app = http.createServer(function(request, response) {
                         <form action="delete_process" method="post">
                             <input type="hidden" name="id" value="${sanitizedTitle}">
                             <input type="submit" value="delete">
-                        </form>`, authStatusUI(request, response)
+                        </form>`
                     );
                     response.writeHead(200);
                     response.end(html);
@@ -70,10 +70,6 @@ var app = http.createServer(function(request, response) {
             });
         }
     } else if(pathname === '/create') {
-        if(authIsOwner(request, response) === false) {
-            response.end('Login required!!');
-            return false;
-        }
         fs.readdir('./data', function(error, filelist) {
             var title = 'WEB - create';
             var list = template.list(filelist);
@@ -87,15 +83,11 @@ var app = http.createServer(function(request, response) {
                         <input type="submit">
                     </p>
                 </form>
-            `, '', authStatusUI(request, response));
+            `, '');
             response.writeHead(200);
             response.end(html);
         });
     } else if(pathname === '/create_process') {
-        if(authIsOwner(request, response) === false) {
-            response.end('Login required!!');
-            return false;
-        }
         var body = '';
         request.on('data', function(data) {
             body = body + data;
@@ -110,10 +102,6 @@ var app = http.createServer(function(request, response) {
             });
         });
     } else if(pathname === '/update') {
-        if(authIsOwner(request, response) === false) {
-            response.end('Login required!!');
-            return false;
-        }
         fs.readdir('./data', function(error, filelist) {
             var filteredId = path.parse(queryData.id).base;
             fs.readFile(`data/${filteredId}`, 'utf8', function(err, description) {
@@ -132,18 +120,13 @@ var app = http.createServer(function(request, response) {
                         </p>
                     </form>
                     `,
-                    `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`,
-                    authStatusUI(request, response)
+                    `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`
                 );
                 response.writeHead(200);
                 response.end(html);
             });
         });
     } else if(pathname === '/update_process') {
-        if(authIsOwner(request, response) === false) {
-            response.end('Login required!!');
-            return false;
-        }
         var body = '';
         request.on('data', function(data) {
             body = body + data;
@@ -161,10 +144,6 @@ var app = http.createServer(function(request, response) {
             });
         });
     } else if(pathname === '/delete_process') {
-        if(authIsOwner(request, response) === false) {
-            response.end('Login required!!');
-            return false;
-        }
         var body = '';
         request.on('data', function(data) {
             body = body + data;
@@ -214,27 +193,6 @@ var app = http.createServer(function(request, response) {
             } else {
                 response.end('Who?');
             }
-        });
-    } else if(pathname === '/logout_process') {
-        if(authIsOwner(request, response) === false) {
-            response.end('Login required!!');
-            return false;
-        }
-        var body = '';
-        request.on('data', function(data) {
-            body = body + data;
-        });
-        request.on('end', function() {
-            var post = qs.parse(body);
-            response.writeHead(302, {
-                'Set-Cookie': [
-                    `email=; Max-Age=0`,
-                    `password=; Max-Age=0`,
-                    `nickname=; Max-Age=0`
-                ],
-                Location: `/`
-            });
-            response.end();
         });
     } else {
         response.writeHead(404);
