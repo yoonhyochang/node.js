@@ -1,10 +1,14 @@
+//* 18. topicRouter 적용
 var express = require('express');
 var app = express();
 var fs = require('fs');
+var template = require('./lib/template.js');
+var path = require('path');
+var sanitizeHtml = require('sanitize-html');
+var qs = require('querystring');
 var bodyParser = require('body-parser');
 var compression = require('compression');
-var topicRouter = require('./routes/topic');
-var indexRouter = require('./routes/index');
+var topicRouter = require('./routes/topic'); //여기
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
@@ -16,8 +20,20 @@ app.get('*', function(request, response, next) {
     });
 });
 
-app.use('/', indexRouter);
-app.use('/topic', topicRouter);
+app.use('/topic', topicRouter); //여기
+
+app.get('/', function(request, response) {
+    var title = 'Welcome';
+    var description = 'Hello, Node.js';
+    var list = template.list(request.list);
+    var html = template.HTML(title, list,
+        `<h2>${title}</h2>${description}
+        <img src="/images/hello.jpg" style="width:300px; display:block; margin-top:10px;">
+        `,
+        `<a href="/topic/create">create</a>`
+    );
+    response.send(html);
+});
 
 app.use(function(req, res, next) {
     res.status(404).send('Sorry cant find that!');

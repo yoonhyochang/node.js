@@ -1,10 +1,13 @@
+
 var express = require('express');
 var app = express();
 var fs = require('fs');
+var template = require('./lib/template.js');
+var sanitizeHtml = require('sanitize-html');
+var qs = require('querystring');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var topicRouter = require('./routes/topic');
-var indexRouter = require('./routes/index');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
@@ -16,7 +19,6 @@ app.get('*', function(request, response, next) {
     });
 });
 
-app.use('/', indexRouter);
 app.use('/topic', topicRouter);
 
 app.use(function(req, res, next) {

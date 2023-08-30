@@ -1,3 +1,4 @@
+//* 2. 글 목록의 링크를 page에서 topic 으로 변경
 module.exports = {
     HTML:function(title, list, body, control) {
         return `
@@ -20,7 +21,7 @@ module.exports = {
         var list = '<ul>';
         var i = 0;
         while(i < filelist.length) {
-            list = list + `<li><a href="/topic/${filelist[i]}">${filelist[i]}</a></li>`;
+            list = list + `<li><a href="/topic/${filelist[i]}">${filelist[i]}</a></li>`;//여기
             i = i + 1;
         }
         list = list+'</ul>';

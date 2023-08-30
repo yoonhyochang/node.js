@@ -1,10 +1,12 @@
-var express = require('express');
-var app = express();
-var fs = require('fs');
-var bodyParser = require('body-parser');
-var compression = require('compression');
-var topicRouter = require('./routes/topic');
-var indexRouter = require('./routes/index');
+//* indexRouter 객체 생성 및 indexRouter 적용
+var express = require('express');//여기
+var app = express();//여기
+var fs = require('fs');//여기
+var sanitizeHtml = require('sanitize-html');
+var bodyParser = require('body-parser');//여기
+var compression = require('compression');//여기
+var topicRouter = require('./routes/topic');//여기
+var indexRouter = require('./routes/index');//여기
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
@@ -16,7 +18,7 @@ app.get('*', function(request, response, next) {
     });
 });
 
-app.use('/', indexRouter);
+app.use('/', indexRouter);//여기
 app.use('/topic', topicRouter);
 
 app.use(function(req, res, next) {
