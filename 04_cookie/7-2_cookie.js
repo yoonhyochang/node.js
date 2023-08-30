@@ -1,6 +1,5 @@
 //* 2. HttpOnly 옵션을 가진 쿠키 생성
 // HTTP 프로토콜로 통신하는 경우 쿠키 전송O,자바스크립트로 쿠키값 못가져옴
-// 개발자 도구 콘솔탭>document.cookie 쿠키값 가져오기
 var http = require('http');
 var cookie = require('cookie');
 http.createServer(function(request, response) {
