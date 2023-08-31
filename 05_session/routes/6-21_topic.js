@@ -7,6 +7,10 @@ var template = require('../lib/template.js');
 var auth = require('../lib/auth');
 
 router.get('/create', function(request, response) {
+    if (!auth.isOwner(request, response)) {
+        response.redirect('/');
+        return false;
+    }
     var title = 'WEB - create';
     var list = template.list(request.list);
     var html = template.HTML(title, list, `
@@ -36,6 +40,10 @@ router.post('/create_process', function(request, response) {
     });
 });
 router.get('/update/:pageId', function(request, response) {
+    if (!auth.isOwner(request, response)) {
+        response.redirect('/');
+        return false;
+    }
     var filteredId = path.parse(request.params.pageId).base;
     fs.readFile(`data/${filteredId}`, 'utf8', function(err, description) {
         var title = request.params.pageId;
@@ -61,6 +69,10 @@ router.get('/update/:pageId', function(request, response) {
     });
 });
 router.post('/update_process', function(request, response) {
+    if (!auth.isOwner(request, response)) {
+        response.redirect('/');
+        return false;
+    }
     var post = request.body;
     var id = post.id;
     var title = post.title;
@@ -73,6 +85,10 @@ router.post('/update_process', function(request, response) {
     });
 });
 router.post('/delete_process', function(request, response) {
+    if (!auth.isOwner(request, response)) {
+        response.redirect('/');
+        return false;
+    }
     var post = request.body;
     var id = post.id;
     var filteredId = path.parse(id).base;

@@ -4,37 +4,30 @@ var path = require('path');
 var fs = require('fs');
 var sanitizeHtml = require('sanitize-html');
 var template = require('../lib/template.js');
-var auth = require('../lib/auth');
 
-router.get('/create', function(request, response) {
-    var title = 'WEB - create';
+var authData = {
+    email: 'egoing777@gmail.com',
+    password: '111111',
+    nickname: 'egoing'
+}
+
+router.get('/login', function(request, response) {
+    var title = 'WEB - login';
     var list = template.list(request.list);
     var html = template.HTML(title, list, `
-        <form action="/topic/create_process" method="post">
-            <p><input type="text" name="title" placeholder="title"></p>
+        <form action="/auth/login_process" method="post">
+            <p><input type="text" name="email" placeholder="email"></p>
+            <p><input type="password" name="pwd" placeholder="password"></p>
             <p>
-                <textarea name="description" placeholder="description"></textarea>
-            </p>
-            <p>
-                <input type="submit">
+                <input type="submit" value="login">
             </p>
         </form>
-    `, '', auth.statusUI(request, response));
+    `, '');
     response.send(html);
 });
-router.post('/create_process', function(request, response) {
-    if (!auth.isOwner(request, response)) {
-        response.redirect('/');
-        return false;
-    }
-    console.log(request.list);
-    var post = request.body;
-    var title = post.title;
-    var description = post.description;
-    fs.writeFile(`data/${title}`, description, 'utf8', function(err) {
-        response.redirect(`/topic/${title}`);
-    });
-});
+
+
+/*
 router.get('/update/:pageId', function(request, response) {
     var filteredId = path.parse(request.params.pageId).base;
     fs.readFile(`data/${filteredId}`, 'utf8', function(err, description) {
@@ -54,8 +47,7 @@ router.get('/update/:pageId', function(request, response) {
                 </p>
             </form>
             `,
-            `<a href="/topic/create">create</a> <a href="/topic/update/${title}">update</a>`,
-            auth.statusUI(request, response)
+            `<a href="/topic/create">create</a> <a href="/topic/update/${title}">update</a>`
         );
         response.send(html);
     });
@@ -99,11 +91,11 @@ router.get('/:pageId', function(request, response, next) {
                     <form action="/topic/delete_process" method="post">
                         <input type="hidden" name="id" value="${sanitizedTitle}">
                         <input type="submit" value="delete">
-                    </form>`,
-                auth.statusUI(request, response)
+                    </form>`
             );
             response.send(html);
         }
     });
 });
+*/
 module.exports = router;

@@ -1,7 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var template = require('../lib/template.js');
-var auth = require('../lib/auth');
+
+function authIsOwner(request, response) {
+    if (request.session.is_logined) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 router.get('/', function(request, response) {
     var title = 'Welcome';
@@ -11,8 +18,7 @@ router.get('/', function(request, response) {
         `<h2>${title}</h2>${description}
         <img src="/images/hello.jpg" style="width:300px; display:block; margin-top:10px;">
         `,
-        `<a href="/topic/create">create</a>`,
-        auth.StatusUI(request, response)
+        `<a href="/topic/create">create</a>`
     );
     response.send(html);
 });

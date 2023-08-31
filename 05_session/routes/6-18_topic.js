@@ -23,10 +23,6 @@ router.get('/create', function(request, response) {
     response.send(html);
 });
 router.post('/create_process', function(request, response) {
-    if (!auth.isOwner(request, response)) {
-        response.redirect('/');
-        return false;
-    }
     console.log(request.list);
     var post = request.body;
     var title = post.title;
